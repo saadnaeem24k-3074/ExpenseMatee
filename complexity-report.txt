@@ -1,0 +1,32 @@
+
+/home/claude/ExpenseMate/ExpenseMate/server/src/routes/auth.ts
+  8:45  warning  Async arrow function has a complexity of 10. Maximum allowed is 8  complexity
+
+/home/claude/ExpenseMate/ExpenseMate/server/src/routes/transactions.ts
+   62:25  warning  Arrow function has a complexity of 11. Maximum allowed is 8       complexity
+  116:47  warning  Async arrow function has a complexity of 9. Maximum allowed is 8  complexity
+  137:49  warning  Async arrow function has a complexity of 9. Maximum allowed is 8  complexity
+
+/home/claude/ExpenseMate/ExpenseMate/server/src/utils/csv.ts
+  22:8  warning  Function 'parseCsv' has a complexity of 11. Maximum allowed is 8  complexity
+
+/home/claude/ExpenseMate/ExpenseMate/src/app/AddTransaction.tsx
+  83:5  warning  Async function 'addTransaction' has a complexity of 9. Maximum allowed is 8  complexity
+
+/home/claude/ExpenseMate/ExpenseMate/src/components/TransactionTable.tsx
+  53:37  warning  Arrow function has a complexity of 9. Maximum allowed is 8  complexity
+
+/home/claude/ExpenseMate/ExpenseMate/src/components/ui/button.tsx
+  64:18  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/home/claude/ExpenseMate/ExpenseMate/src/components/ui/chart.tsx
+  105:1   warning  Function 'ChartTooltipContent' has a complexity of 9. Maximum allowed is 8           complexity
+  129:41  warning  Arrow function has a complexity of 16. Maximum allowed is 8                          complexity
+  182:30  warning  Arrow function has a complexity of 20. Maximum allowed is 8                          complexity
+  310:1   warning  Function 'getPayloadConfigFromPayload' has a complexity of 12. Maximum allowed is 8  complexity
+
+/home/claude/ExpenseMate/ExpenseMate/src/components/ui/navigation-menu.tsx
+  167:3  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+✖ 13 problems (2 errors, 11 warnings)
+

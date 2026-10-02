@@ -1,0 +1,94 @@
+{
+  "cars": [
+    {
+      "id": "6f4c96a7-15a3-43a6-ae73-79b340f08c54",
+      "model": "M5",
+      "company": "BMW",
+      "topSpeedKph": 305,
+      "horsepower": 600,
+      "year": 2021,
+      "imageUrl": "https://media.ed.edmunds-media.com/bmw/m5/2021/oem/2021_bmw_m5_sedan_base_fq_oem_3_1280x855.jpg",
+      "description": "The 2021 BMW M5 delivers an exhilarating blend of luxury, cutting‑edge technology, and high‑performance engineering, powered by a twin‑turbo V8 and refined for both everyday comfort and track capability."
+    },
+    {
+      "id": "89ce64db-88d3-4270-8831-5e232c9d0c40",
+      "model": "Aventador",
+      "company": "Lamborghini",
+      "topSpeedKph": 350,
+      "horsepower": 759,
+      "year": 2022,
+      "imageUrl": "https://media.ed.edmunds-media.com/lamborghini/aventador/2022/oem/2022_lamborghini_aventador_convertible_ultimae-roadster_fq_oem_3_1280x855.jpg",
+      "description": "The 2022 Lamborghini Aventador is a flagship supercar with dramatic styling, a naturally aspirated V12 engine, and razor‑sharp performance that delivers an unforgettable driving experience."
+    },
+    {
+      "id": "0ea5938a-8024-4c2b-8666-04c8857fa3dd",
+      "model": "F8 Tributo",
+      "company": "Ferrari",
+      "topSpeedKph": 340,
+      "horsepower": 710,
+      "year": 2019,
+      "imageUrl": "https://www.edmunds.com/assets/m/for-sale/29-zff92lla7m0262404/img-2-960x.jpg",
+      "description": "The 2019 Ferrari F8 Tributo exhibits supreme performance and aerodynamic excellence, featuring a potent twin‑turbo V8 and aerodynamic design derived from Ferrari’s racing heritage."
+    },
+    {
+      "id": "37beb128-7fc2-4a95-94f7-48f4a5868c21",
+      "model": "Model S Plaid",
+      "company": "Tesla",
+      "topSpeedKph": 322,
+      "horsepower": 1020,
+      "year": 2020,
+      "imageUrl": "https://media.ed.edmunds-media.com/tesla/model-s/2026/oem/2026_tesla_model-s_sedan_plaid_fq_oem_1_1280x855.jpg",
+      "description": "The 2020 Tesla Model S Plaid sets new standards for electric performance with blistering acceleration, cutting‑edge technology, and long‑range capability in a refined, spacious sedan."
+    },
+    {
+      "id": "8fba6caa-9d07-40b1-9aa9-7e151e5b0738",
+      "model": "Mustang GT",
+      "company": "Ford",
+      "topSpeedKph": 250,
+      "horsepower": 460,
+      "year": 2018,
+      "imageUrl": "https://media.ed.edmunds-media.com/ford/mustang/2026/oem/2026_ford_mustang_coupe_dark-horse_fq_oem_1_1280x855.jpg",
+      "description": "The 2018 Ford Mustang GT continues its legacy with a robust V8 engine, thrilling performance, and bold styling that merges classic muscle car heritage with modern technology."
+    },
+    {
+      "id": "30498fd1-8181-4379-a9b1-7d5b3e1693fb",
+      "model": "R8",
+      "company": "Audi",
+      "topSpeedKph": 330,
+      "horsepower": 562,
+      "year": 2023,
+      "imageUrl": "https://media.ed.edmunds-media.com/audi/r8/2022/oem/2022_audi_r8_coupe_performance_fq_oem_1_1280x855.jpg",
+      "description": "The 2023 Audi R8 is a precision‑engineered sports car combining a naturally aspirated V10 engine with quattro all‑wheel drive, delivering dynamic performance and everyday usability."
+    },
+    {
+      "id": "cb49e89d-77d6-467c-9539-030dd8af7fa4",
+      "model": "911 Turbo S",
+      "company": "Porsche",
+      "topSpeedKph": 330,
+      "horsepower": 640,
+      "year": 2022,
+      "imageUrl": "https://media.ed.edmunds-media.com/porsche/911/2025/oem/2025_porsche_911_coupe_carrera-4-gts_fq_oem_1_815.jpg",
+      "description": "The 2022 Porsche 911 Turbo S blends everyday refinement with blistering performance, featuring a twin‑turbo flat‑six engine and advanced engineering for peerless driving dynamics."
+    },
+    {
+      "id": "659b38db-e930-475b-90b1-bef1e05015d8",
+      "model": "720S",
+      "company": "McLaren",
+      "topSpeedKph": 341,
+      "horsepower": 710,
+      "year": 2020,
+      "imageUrl": "https://media.ed.edmunds-media.com/mclaren/720s/2021/oem/2021_mclaren_720s_coupe_base_fq_oem_5_1280x855.jpg",
+      "description": "The 2020 McLaren 720S is a finely balanced supercar known for its extraordinary power‑to‑weight ratio, responsive handling, and futuristic design language."
+    },
+    {
+      "id": "04505d44-30bd-4fa7-acef-73685b588c15",
+      "model": "Camaro ZL1",
+      "company": "Chevrolet",
+      "topSpeedKph": 318,
+      "horsepower": 650,
+      "year": 2018,
+      "imageUrl": "https://media.ed.edmunds-media.com/chevrolet/camaro/2024/oem/2024_chevrolet_camaro_coupe_2ss_fq_oem_2_1280x855.jpg",
+      "description": "The 2018 Chevrolet Camaro ZL1 combines brute force power with track‑ready performance, featuring supercharged V8 capability and aggressive aerodynamic design."
+    }
+  ]
+}

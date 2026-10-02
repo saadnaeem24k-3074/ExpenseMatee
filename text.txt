@@ -1,0 +1,211 @@
+
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+import { useGSAP } from "@gsap/react"
+import gsap from 'gsap'
+
+const Navbar = () => {
+
+    useGSAP(() => {
+        const tl = gsap.timeline();
+        tl.from('.navv', {
+            y: -20,
+        })
+
+        tl.from('.head, .documentation', {
+            y: -30,
+            opacity: 0,
+            stagger: 0.2
+        })
+
+        tl.from('.one , .two , .three', {
+            y: -30,
+            opacity: 0,
+            stagger: 0.2,
+        })
+
+    }, [])
+    return (
+        <div className="bg-navy flex justify-between max-w-[100%] navv
+            py-3 px-5">
+            <h1 className="text-4xl my-poppins text-white font-bold head">Cars</h1>
+            <NavigationMenu className="">
+                <NavigationMenuList className="flex gap-5">
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger className="my-poppins documentation" >Documentation</NavigationMenuTrigger>
+                        <NavigationMenuContent className="my-poppins bg-navy text-white font-semibold">
+                            <div className="flex items-center">
+                                <NavigationMenuLink className="cursor-pointer hover:bg-gray-200 w-[100%]">Models</NavigationMenuLink>
+                                <NavigationMenuLink className="cursor-pointer hover:bg-gray-200 w-[100%]">Companies</NavigationMenuLink>
+                            </div>
+
+                            <div className="flex items-center">
+                                <NavigationMenuLink className="cursor-pointer hover:bg-gray-200 w-[100%]">Pricing</NavigationMenuLink>
+                                <NavigationMenuLink className="cursor-pointer hover:bg-gray-200 w-[100%]">Taxes</NavigationMenuLink>
+                            </div>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+
+                    <div className="one">
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className="my-poppins font-semibold bg-white px-4 py-2 rounded">
+                                About Us
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </div>
+                    <div className="two">
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className="my-poppins font-semibold bg-white px-4 py-2 rounded">
+                                Our Clients
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </div>
+
+                    <div className="three">
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className="my-poppins font-semibold bg-white px-4 py-2 rounded">
+                                Our Mission
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </div>
+
+
+                </NavigationMenuList>
+
+            </NavigationMenu>
+        </div>
+    )
+}
+
+export default Navbar
+
+
+
+
+import {
+  Card,
+//   CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { useGSAP } from "@gsap/react"
+import gsap from 'gsap'
+
+interface Cars{
+    id: string,
+    model:string,
+    company : string,
+    topSpeedKph : number,
+    horsepower : number,
+    year : number ,
+    imageUrl : string,
+    description :string
+}
+
+
+
+const Page = () => {
+
+
+  const [cars,setCars]=useState<Cars[]>([])
+
+  useGSAP(async ()=>{
+    if(cars.length>0){
+
+      const tl=gsap.timeline()
+
+    tl.from('.mycar',{
+      delay : 2,
+      opacity : 0,
+      stagger : 0.3
+    })
+    }
+  },[cars])
+    
+    // const [loading,setLoading]=useState(true)
+
+    useEffect(()=>{
+ fetch("http://localhost:4000/cars")
+      .then(res => res.json())
+      .then(data => setCars(data))       
+    },[])
+    
+
+
+  return (
+    <div className="grid grid-cols-3 gap-8 mt-10 max-w-[90%] mx-auto my-grid bg-mywhite p-4">
+      {cars.map((car:Cars)=>(
+        <Card key={car.id} className="mycar">
+            <CardHeader className="my-poppins">
+                <div>
+                    <CardTitle className="text-2xl text-center mb-2 my-poppins"><p>{car.company} {car.model}</p></CardTitle>
+                    <CardDescription className="">
+                        <div>
+                            <img src={car.imageUrl} className="mb-2 rounded" alt="" />
+                        </div>
+                    </CardDescription>
+
+                </div>
+            </CardHeader>
+            <CardContent className="my-poppins">
+                <p>{car.description}</p>
+            </CardContent>
+
+            <CardFooter>
+                <Button variant='default' className="my-poppins" >View Details</Button>
+            </CardFooter>
+        </Card>
+      ))}
+    </div>
+  )
+}
+
+export default Page
+
+
+
+                {!show && <NavigationMenuList className="flex gap-5">
+
+                    <div className="one">
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className="my-poppins font-semibold bg-white px-4 py-2 rounded text-[14px] md:text-[15px] lg:text-[16px]
+                            hidden sm:block">
+                                <Link to="/">Dashboard</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </div>
+                    <div className="two">
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className="my-poppins font-semibold bg-white px-4 py-2 rounded text-[14px] md:text-[15px] lg:text-[16px]
+                            hidden sm:block">
+                                <Link to="/transactions">Transactions</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </div>
+
+                    <div className="three">
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className="my-poppins font-semibold bg-white px-4 py-2 rounded text-[14px] md:text-[15px] lg:text-[16px]
+                            hidden sm:block">
+                                <Link to='/report'>Report</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </div>
+
+                    {/* <div>
+                        <p className="block sm:hidden text-xl text-white font-semibold cursor-pointer hover:bg-navyHover rounded-full p-2">☰</p>
+                    </div> */}
+
+
+                </NavigationMenuList>}
