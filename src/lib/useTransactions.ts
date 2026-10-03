@@ -13,7 +13,7 @@ export interface transactionn {
     Currency: string
 }
 
-function toView(t: Transaction): transactionn {
+export function toView(t: Transaction): transactionn {
     return {
         id: t.id,
         Amount: Number(t.amount),
@@ -25,12 +25,20 @@ function toView(t: Transaction): transactionn {
     }
 }
 
-function toPayload(t: Omit<transactionn, "id">) {
+// Format using the LOCAL calendar day. toISOString() converts to UTC first, which
+// shifts a locally-picked date back a day in timezones ahead of UTC (e.g. Pakistan).
+export function toDateString(d: Date): string {
+    const month = String(d.getMonth() + 1).padStart(2, "0")
+    const day = String(d.getDate()).padStart(2, "0")
+    return `${d.getFullYear()}-${month}-${day}`
+}
+
+export function toPayload(t: Omit<transactionn, "id">) {
     return {
         amount: t.Amount,
         description: t.Description,
         category: t.Category,
-        date: t.Date.toISOString().slice(0, 10),
+        date: toDateString(t.Date),
         type: t.type as "Income" | "Expense",
         currency: t.Currency,
     }
