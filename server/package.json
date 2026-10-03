@@ -10,7 +10,7 @@
     "migrate": "tsx src/db/migrate.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:integration": "vitest run src/integration",
+    "test:integration": "vitest run src/integration --maxWorkers=1",
     "test:unit": "vitest run --exclude src/integration/**"
   },
   "dependencies": {

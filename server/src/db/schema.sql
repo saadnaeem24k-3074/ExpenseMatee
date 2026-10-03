@@ -70,3 +70,16 @@ CREATE TABLE IF NOT EXISTS "session" (
 WITH (OIDS=FALSE);
 
 CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON "session" ("expire");
+
+
+-- Cloud backup snapshots (Phase 5 adaptive maintenance)
+CREATE TABLE IF NOT EXISTS cloud_backups (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  data JSONB NOT NULL,
+  transaction_count INTEGER NOT NULL DEFAULT 0,
+  budget_count INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_cloud_backups_user_created ON cloud_backups(user_id, created_at DESC);
