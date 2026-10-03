@@ -22,6 +22,7 @@ import { toast } from "sonner"
 import { api, type Currency } from "@/lib/api"
 import { ApiError, useAuth } from "@/lib/useAuth"
 import { useTransactions } from "@/lib/useTransactions"
+import { CloudBackupCard } from "@/components/CloudBackupCard"
 
 const Settings = () => {
     const { user, updateBaseCurrency } = useAuth()
@@ -188,6 +189,8 @@ const Settings = () => {
                         </p>
                     </CardContent>
                 </Card>
+
+                <CloudBackupCard onRestored={refresh} />
             </div>
         </div>
     )

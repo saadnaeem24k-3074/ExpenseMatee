@@ -76,6 +76,13 @@ export interface Budget {
   status: "ok" | "warning" | "exceeded";
 }
 
+export interface CloudBackup {
+  id: string;
+  created_at: string; // ISO timestamp
+  transaction_count: number;
+  budget_count: number;
+}
+
 export const api = {
   auth: {
     signup: (name: string, email: string, password: string) =>
@@ -121,6 +128,15 @@ export const api = {
         method: "POST",
         body: JSON.stringify(backup),
       }),
+    cloud: {
+      list: () => request<{ backups: CloudBackup[] }>("/backup/cloud"),
+      create: () => request<{ backup: CloudBackup }>("/backup/cloud", { method: "POST" }),
+      restore: (id: string) =>
+        request<{ restoredTransactions: number; restoredBudgets: number }>(`/backup/cloud/${id}/restore`, {
+          method: "POST",
+        }),
+      remove: (id: string) => request<void>(`/backup/cloud/${id}`, { method: "DELETE" }),
+    },
   },
   budgets: {
     list: (month: number, year: number) =>
