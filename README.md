@@ -19,11 +19,11 @@ ExpenseMate is a client-server web application. A React single-page app talks to
 
 | Dashboard | Transactions |
 |---|---|
-| ![Dashboard](docs/screenshots/dashboard.jpeg) | ![Transactions](docs/screenshots/transactions.jpeg) |
+| ![Dashboard](dashboard.jpeg) | ![Transactions](transactions.jpeg) |
 
 | Monthly report | Budgets |
 |---|---|
-| ![Monthly report](docs/screenshots/report.jpeg) | ![Budgets](docs/screenshots/budgets.jpeg) |
+| ![Monthly report](report.jpeg) | ![Budgets](budgets.jpeg) |
 
 ---
 
