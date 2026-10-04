@@ -1,159 +1,185 @@
-<h1 align="center">💰 Expense Tracker</h1>
+# ExpenseMate
 
-<p align="center">
-  A clean, animated personal finance tracker — log income and expenses, categorize spending,
-  and see it all visualized on a dashboard and report page. Runs entirely in the browser.
-</p>
+A full-stack personal finance tracker. Log income and expenses in multiple currencies, set monthly category budgets, view reports, and move your data in and out with CSV and backup files.
 
-<p align="center">
-  <a href="https://expense-tracker-a77w.vercel.app/"><img src="https://img.shields.io/badge/LIVE%20DEMO-000000?style=for-the-badge&logo=vercel&logoColor=white" /></a>
-  <img src="https://img.shields.io/badge/REACT-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
-  <img src="https://img.shields.io/badge/TYPESCRIPT-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
-</p>
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 
 ---
 
-## 📖 Introduction
+## Introduction
 
-Expense Tracker is a single-page React app for logging and understanding personal spending. Add income or expense transactions with a category, date, and description, and the app builds a live dashboard: current balance, income vs. expense totals, a transactions table, and a dedicated report page with monthly trend and category-breakdown charts.
-
-There's no backend — everything is persisted client-side in **`localStorage`**, so the app works fully offline once loaded and needs no database or server to run.
+ExpenseMate is a client-server web application. A React single-page app talks to an Express REST API, and the API stores everything in PostgreSQL. Each user has their own account, and one user can never see or change another user's data.
 
 ---
 
-## ✨ Key Features
+## Screenshots
 
-- ➕ **Add transactions** — income or expense, with amount, category, description, and date (via a calendar date-picker)
-- ✏️ **Edit transactions** — reopen any transaction pre-filled for editing
-- 📊 **Dashboard** — current balance, total income, total expense, and a recent-transactions view at a glance
-- 📈 **Reports** — monthly income vs. expense trend chart and a category breakdown (pie chart) for a selected month
-- 🗂️ **Transaction list** — full sortable/browsable transaction history
-- 💾 **Persistent storage** — all data saved to `localStorage`, so it survives page refreshes with no backend needed
-- 🔔 **Toast notifications** — instant feedback on add/edit/delete via Sonner
-- ✨ **Animated UI** — GSAP-powered entrance and scroll-triggered animations throughout
-- 📱 **Responsive design** — Tailwind CSS v4 + shadcn/ui components
-
----
-
-## 🛠️ Tech Stack
-
-| Category | Technology |
+| Dashboard | Transactions |
 |---|---|
-| Framework | React 19 + TypeScript + Vite |
-| Routing | React Router 7 |
-| Styling | Tailwind CSS v4, shadcn/ui, Radix UI |
-| Charts | Recharts |
-| Animation | GSAP (`@gsap/react`, ScrollTrigger) |
-| Dates | date-fns, react-day-picker |
-| Notifications | Sonner (toasts) |
-| Icons | Lucide React |
-| Data persistence | Browser `localStorage` (no backend/database) |
-| Deployment | Vercel |
+| ![Dashboard](docs/screenshots/dashboard.jpeg) | ![Transactions](docs/screenshots/transactions.jpeg) |
+
+| Monthly report | Budgets |
+|---|---|
+| ![Monthly report](docs/screenshots/report.jpeg) | ![Budgets](docs/screenshots/budgets.jpeg) |
 
 ---
 
-## 📁 Project Structure
+## Features
+
+- **Accounts:** sign up, log in and log out. Passwords are hashed with bcrypt and sessions are stored in PostgreSQL.
+- **Transactions:** add, edit and delete income and expense entries with amount, category, description, date and currency.
+- **Multi-currency:** PKR, USD, EUR, GBP and AED. Every total is converted into the user's chosen base currency.
+- **Dashboard:** current balance, total income, total expense, percentage of income spent, recent transactions, a spending chart and budget alerts.
+- **Budgets:** set a monthly budget per category. Status is OK below 80%, Warning from 80%, and Exceeded at 100% or more.
+- **Monthly report:** pick a month to see income, expenses, a category breakdown and an income-vs-expense trend. A month with no data shows an empty state.
+- **CSV import and export:** import transactions from a CSV (invalid rows are skipped and reported with their row number) and export all transactions to CSV.
+- **Backup and restore:** export transactions and budgets to a backup file and restore them later. Malformed records are rejected.
+- **Settings:** update your profile name and base currency.
+- **Interface:** responsive layout, toast notifications and GSAP animations.
+
+---
+
+## Tech Stack
+
+| Area | Technology |
+|---|---|
+| Client | React 19, TypeScript, Vite, React Router 7 |
+| Styling | Tailwind CSS 4, shadcn/ui, Radix UI |
+| Charts and animation | Recharts, GSAP (`@gsap/react`, ScrollTrigger) |
+| Dates and icons | date-fns, react-day-picker, Lucide React |
+| Notifications | Sonner |
+| Server | Node.js, Express 4, TypeScript |
+| Auth and sessions | express-session, connect-pg-simple, bcryptjs |
+| Database | PostgreSQL (`pg`) |
+| Testing | Vitest |
+| Code quality | ESLint, cyclomatic complexity check (threshold 8) |
+
+---
+
+## Project Structure
 
 ```
-Expense-Tracker/
-├── src/
-│   ├── app/
-│   │   ├── Dashboard.tsx           # Home view — balance, totals, recent transactions, chart
-│   │   ├── AddTransaction.tsx      # Add / edit transaction form
-│   │   ├── Transactions.tsx        # Full transaction list
-│   │   ├── Report.tsx              # Report page — monthly trend + category breakdown
-│   │   ├── TransChart.tsx          # Dashboard chart component
-│   │   ├── MonthlyTrack.tsx        # Income vs. expense bar chart
-│   │   ├── MonthlyCategory.tsx     # Category breakdown pie chart
-│   │   ├── RecentTransactions.tsx  # Recent transactions widget
-│   │   └── Navbar.tsx              # Top navigation
-│   ├── components/ui/              # shadcn/ui primitives (button, card, calendar, select, table...)
-│   ├── lib/utils.ts                # `cn()` helper for Tailwind class merging
-│   ├── App.tsx                     # Route definitions
-│   └── main.tsx                    # App entry point
-└── vite.config.ts
+ExpenseMate/
+├── src/                        # React client
+│   ├── app/                    # Pages: Dashboard, Transactions, AddTransaction,
+│   │                           #        Report, Budget, Settings, Login, Signup
+│   ├── components/             # StatCard, TransactionTable, BalanceCard,
+│   │   └── ui/                 #        BudgetAlert, shadcn/ui primitives
+│   └── lib/                    # api.ts, currency.ts, AuthContext, useTransactions,
+│                               # useDashboardData, useDashboardAnimations
+├── server/
+│   └── src/
+│       ├── index.ts            # Express app, session and route setup
+│       ├── routes/             # auth, transactions, budgets, currencies,
+│       │                       # analytics, backup
+│       ├── middleware/         # requireAuth
+│       ├── db/                 # schema.sql, migrate.ts, pool.ts
+│       ├── utils/              # budgetStatus, csv, backupValidation
+│       └── integration/        # API integration tests
+└── README.md
 ```
 
 ---
 
-## 🧭 Routes
+## API Overview
 
-| Path | Page | Description |
-|---|---|---|
-| `/` | `Dashboard` | Balance overview, income/expense totals, recent transactions, chart |
-| `/transactions` | `Transactions` | Full transaction history |
-| `/addtransaction` | `AddTransaction` | Add a new transaction, or edit an existing one (passed via route state) |
-| `/report` | `Report` | Monthly income/expense trend + category breakdown |
+All routes except sign up and log in require a logged-in session.
 
----
-
-## 💻 How It Works
-
-### Data Model
-
-Each transaction is shaped as:
-
-```ts
-interface transactionn {
-  id: string          // crypto.randomUUID()
-  Amount: number
-  Description: string
-  Category: string
-  Date: Date
-  type: string         // "Income" | "Expense"
-}
-```
-
-### Persistence
-
-There's no API layer — transactions are read from and written straight to `localStorage` under the `transactions` key:
-
-```ts
-const [transaction, setTransaction] = useState<transactionn[]>(
-  JSON.parse(localStorage.getItem('transactions') ?? "[]")
-)
-```
-
-Any add, edit, or delete updates this state and re-serializes it back to `localStorage`, so the data is scoped to a single browser and persists across refreshes (but won't sync across devices).
-
-### Editing a Transaction
-
-Editing reuses the same `AddTransaction` form — the transaction to edit is passed through React Router's navigation state (`location.state?.editTrans`), which pre-fills the form fields and keeps the original transaction's `id` so saving overwrites rather than duplicates it.
-
-### Charts
-
-- **`MonthlyTrack`** — a Recharts bar chart comparing total income vs. total expense for the selected period
-- **`MonthlyCategory`** — a Recharts pie chart breaking down expenses by category (salary, entertainment, shopping, utilities, others), with the largest category highlighted
+| Route | Purpose |
+|---|---|
+| `/api/auth` | Sign up, log in, log out, current user, profile |
+| `/api/transactions` | Transaction CRUD, CSV import, CSV export |
+| `/api/budgets` | Create, update, list and delete budgets with their status |
+| `/api/currencies` | List supported currencies |
+| `/api/analytics` | Category breakdown and spending trend |
+| `/api/backup` | Backup export and restore |
+| `/api/health` | Health check |
 
 ---
 
-## 🚀 Running Locally
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18 or newer
+- PostgreSQL
+
+### 1. Clone
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/saadnaeem463/Expense-Tracker.git
-cd Expense-Tracker
-
-# 2. Install dependencies
-npm install
-
-# 3. Run the dev server
-npm run dev   # runs on http://localhost:5173
+git clone <repository-url>
+cd ExpenseMate
 ```
 
-No environment variables or database setup needed — it just runs.
+### 2. Database and server
+
+```bash
+createdb expensemate
+
+cd server
+cp .env.example .env     # set DATABASE_URL and SESSION_SECRET
+npm install
+npm run migrate          # creates the tables and loads the currencies
+npm run dev              # API on http://localhost:4000
+```
+
+### 3. Client
+
+In a second terminal, from the project root:
+
+```bash
+cp .env.example .env     # VITE_API_URL defaults to http://localhost:4000/api
+npm install
+npm run dev              # app on http://localhost:5173
+```
+
+Open `http://localhost:5173/signup` to create an account.
+
+### Environment variables
+
+| Variable | Where | Description |
+|---|---|---|
+| `PORT` | server | API port (default 4000) |
+| `DATABASE_URL` | server | PostgreSQL connection string |
+| `SESSION_SECRET` | server | Long random string used to sign session cookies |
+| `CLIENT_ORIGIN` | server | Client URL allowed by CORS (default `http://localhost:5173`) |
+| `NODE_ENV` | server | `production` makes the session cookie HTTPS-only |
+| `VITE_API_URL` | client | Base URL of the API |
 
 ---
 
-## 🌐 Live Demo
+## Scripts
 
-**[expense-tracker-a77w.vercel.app](https://expense-tracker-a77w.vercel.app/)**
+| Command | Where | Description |
+|---|---|---|
+| `npm run dev` | root | Start the client |
+| `npm run build` | root | Type-check and build the client |
+| `npm test` | root | Run the frontend unit tests |
+| `npm run lint` | root | Run ESLint |
+| `npm run complexity` | root | List functions with cyclomatic complexity above 8 |
+| `npm run dev` | server | Start the API with auto-reload |
+| `npm run migrate` | server | Create the database tables |
+| `npm test` | server | Run the backend unit tests |
+| `npm run test:integration` | server | Run the API integration tests |
 
-Deployed on Vercel with CI/CD — every push to `main` triggers an automatic rebuild and redeploy.
+Integration tests use a separate database whose name must end in `_test`.
 
 ---
 
-## 👤 Author
+## Testing
 
-**Saad Naeem**
-[GitHub](https://github.com/saadnaeem463) · [LinkedIn](https://www.linkedin.com/in/saad-naeem-5138a3409/)
+| Suite | Test cases |
+|---|---|
+| Backend unit tests | 27 |
+| Frontend unit tests | 15 |
+| Integration tests | 23 |
+
+---
+
+## Contributors
+
+- [Uzair-Aslam-Dev](https://github.com/Uzair-Aslam-Dev)
+- [saadnaeem24-3074](https://github.com/saadnaeem24-3074)
