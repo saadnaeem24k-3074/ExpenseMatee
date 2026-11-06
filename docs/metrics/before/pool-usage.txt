@@ -1,0 +1,25 @@
+
+File                                            ImportsPool PoolQueryCount
+----                                            ----------- --------------
+src\app.ts                                             True              0
+src\index.ts                                          False              0
+src\db\migrate.ts                                      True              1
+src\db\pool.ts                                        False              0
+src\integration\api.integration.test.ts                True              4
+src\integration\cloudBackup.integration.test.ts       False              2
+src\middleware\requireAuth.ts                         False              0
+src\routes\analytics.ts                                True              2
+src\routes\auth.ts                                     True              5
+src\routes\backup.ts                                   True             13
+src\routes\budgets.ts                                  True              3
+src\routes\currencies.ts                               True              1
+src\routes\transactions.ts                             True              9
+src\utils\backupValidation.test.ts                    False              0
+src\utils\backupValidation.ts                         False              0
+src\utils\budgetStatus.test.ts                        False              0
+src\utils\budgetStatus.ts                             False              0
+src\utils\csv.test.ts                                 False              0
+src\utils\csv.ts                                      False              0
+
+
+
