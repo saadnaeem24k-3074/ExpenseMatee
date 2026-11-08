@@ -67,3 +67,23 @@ and this project adheres to Semantic Versioning.
 - `npm run migrate` applied 2 migrations on the first run and skipped both on the second (idempotent).
 - `npm run verify:migration` reported identical row counts, totals, and checksums before and after migration.
 - `npm run build` passed; all existing tests still pass: backend unit 27/27, backend integration 31/31, frontend 15/15 (73 total).
+
+## [Assignment 02 - Commit 3: Transactions Refactoring] - 2026-11-08
+
+**Commit message:** `refactor(transactions): controller-service-repository layering for transactions`
+
+### Added
+- **Layered Architecture for Transactions**:
+  - `server/src/types/transaction.ts`: Strongly typed domain models (`Transaction`, `TransactionExportRow`, `CreateTransactionInput`, `UpdateTransactionInput`, `ValidImportRow`, `CsvImportResult`, `CsvImportError`).
+  - `server/src/repositories/transactionsRepository.ts`: Encapsulates all SQL persistence (`findAllByUser`, `findExportByUser`, `findById`, `insert`, `update`, `deleteById`, `bulkInsert`, `findByUserAndDateRange`) behind `ITransactionsRepository`.
+  - `server/src/services/transactionsService.ts`: Pure business logic layer handling input validation, type enforcement, defaults, CSV parsing/row validation, and CSV export formatting.
+  - `server/src/controllers/transactionsController.ts`: Presentation/HTTP controller handling request parsing, response formatting, and error status mapping.
+  - `server/src/errors/appError.ts`: Standard domain error hierarchy (`AppError`, `ValidationError`, `NotFoundError`).
+  - `server/src/services/transactionsService.test.ts`: 12 unit tests using `FakeTransactionsRepository`.
+- **Documentation**:
+  - `docs/refactoring-transactions.md`: Verification report with test execution results and a detailed trace of "Add Transaction" across all layers.
+  - `docs/architecture-after.md`: Mermaid diagram and analysis of concrete code-quality improvements.
+
+### Changed
+- `server/src/routes/transactions.ts`: Streamlined to a thin router wiring routes to controller methods; removed all SQL and direct `pool` imports.
+
