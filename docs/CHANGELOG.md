@@ -113,4 +113,29 @@ and this project adheres to Semantic Versioning.
 - `server/src/routes/budgets.ts`: Reduced to a thin 17-line router without SQL or `pool` imports.
 - `server/src/routes/analytics.ts`: Reduced to a thin 15-line router without SQL or `pool` imports.
 
+## [Assignment 02 - Commit 5: Rewrite] - 2026-11-08
+
+**Commit message:** `refactor(rewrite): rewrite CsvParser/CsvFormatter and AuthService with tests and report`
+**Author:** Uzair
+
+### Added
+- **CSV characterization suite** (`server/src/utils/csv.characterization.test.ts`): 20 tests capturing the original `toCsv`/`parseCsv` behaviour (quoting, escaped quotes, embedded commas/newlines, CRLF, blank lines, header normalisation, missing/extra columns, empty input, round-trip). Written and run against the old implementation first, then re-run unchanged.
+- **Auth characterization suite** (`server/src/integration/auth.characterization.test.ts`): 15 HTTP contract tests capturing signup/login/session/logout/profile status codes, error messages and JSON shapes. Written and run against the old inline routes first, then re-run unchanged.
+- **`AuthRepository`** (`server/src/repositories/authRepository.ts`): SQL-only auth data access behind `IAuthRepository`, pool injected.
+- **`AuthService`** (`server/src/services/authService.ts`): validation, email normalisation, hashing/credential checks and profile rules, with injectable `IAuthRepository` + `PasswordHasher`; magic values moved to `MIN_PASSWORD_LENGTH`, `DEFAULT_BASE_CURRENCY`, `DEFAULT_BCRYPT_ROUNDS`.
+- **`AuthController`** (`server/src/controllers/authController.ts`): HTTP/session concerns only.
+- **`server/src/types/user.ts`**: user and auth input/output types.
+- **`server/src/services/authService.test.ts`**: 15 isolated unit/edge-case tests using fake repository and fake hasher.
+- **Metrics**: `docs/metrics/after/eslint-complexity.txt`, `eslint-complexity-rewritten.txt`, `jscpd.txt`, `jscpd-rewritten.txt` (real command output).
+- **Documentation**: `docs/rewriting-report.md`.
+
+### Changed
+- `server/src/utils/csv.ts`: rewritten from one complexity-11 `parseCsv` state machine into single-purpose `CsvParser` and `CsvFormatter` classes; `toCsv`/`parseCsv` remain as thin compatible wrappers.
+- `server/src/routes/auth.ts`: reduced to thin route wiring; inline SQL, bcrypt, validation and session handling removed.
+
+### Verification
+- Characterization tests passed against the old implementation (CSV 20/20, auth 15/15) and against the rewritten implementation (same suites, same results).
+- ESLint (complexity 8) on the five rewritten files: 0 warnings, 0 errors; jscpd on the same files: 0 clones.
+- Full suites pass: backend unit 93/93, backend integration 46/46, frontend 15/15.
+
 
