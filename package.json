@@ -10,7 +10,13 @@
     "complexity": "eslint . --rule \"{\\\"complexity\\\": [\\\"warn\\\", 8]}\"",
     "test": "vitest run",
     "test:watch": "vitest",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "install:server": "npm --prefix server install",
+    "migrate": "npm --prefix server run migrate",
+    "verify:migration": "npm --prefix server run verify:migration",
+    "build:server": "npm --prefix server run build",
+    "test:server": "npm --prefix server test",
+    "test:coverage": "npm --prefix server run test:coverage"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

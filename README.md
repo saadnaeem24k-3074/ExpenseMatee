@@ -17,7 +17,7 @@
 
 Expense Tracker is a single-page React app for logging and understanding personal spending. Add income or expense transactions with a category, date, and description, and the app builds a live dashboard: current balance, income vs. expense totals, a transactions table, and a dedicated report page with monthly trend and category-breakdown charts.
 
-There's no backend — everything is persisted client-side in **`localStorage`**, so the app works fully offline once loaded and needs no database or server to run.
+> **Assignment 02 update:** this repository now includes the Express + PostgreSQL backend in `server/`. The client-only description in this README describes the Assignment 01 baseline; see **Running the Full Stack** below for the current setup.
 
 ---
 
@@ -127,22 +127,85 @@ Editing reuses the same `AddTransaction` form — the transaction to edit is pas
 
 ---
 
-## 🚀 Running Locally
+## Running the Full Stack (Assignment 02)
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/saadnaeem463/Expense-Tracker.git
-cd Expense-Tracker
+The repository now contains the React client **and** an Express + PostgreSQL API
+in `server/`. The client-only section that used to be here is superseded: the
+backend is required for auth, transactions, budgets, analytics, CSV and cloud
+backup.
 
-# 2. Install dependencies
+### 1. Prerequisites
+
+- Node.js 20 or newer
+- PostgreSQL 14 or newer running on `localhost:5432`
+- Two databases: `expensemate` (app) and `expensemate_test` (integration tests;
+  the test runner refuses a database whose name does not end in `_test`)
+
+### 2. Install
+
+```powershell
+git clone https://github.com/saadnaeem24k-3074/ExpenseMatee.git
+cd ExpenseMatee
 npm install
-
-# 3. Run the dev server
-npm run dev   # runs on http://localhost:5173
+npm run install:server
 ```
 
-No environment variables or database setup needed — it just runs.
+### 3. Configure
 
+```powershell
+Copy-Item server/.env.example server/.env
+Copy-Item server/.env.example server/.env.test
+```
+
+Edit both files:
+
+- `DATABASE_URL` — `postgres://USER:PASSWORD@localhost:5432/expensemate`
+- `SESSION_SECRET` — 16+ random characters (`openssl rand -hex 32`)
+- `NODE_ENV`, `PORT` (default `4000`), `CLIENT_ORIGIN` (default `http://localhost:5173`)
+- `.env.test` must point at `expensemate_test`
+
+### 4. Create the databases and migrate
+
+```powershell
+psql -U postgres -c "CREATE DATABASE expensemate;"
+psql -U postgres -c "CREATE DATABASE expensemate_test;"
+npm run migrate
+npm run migrate   # second run must report both migrations as skipped
+```
+
+Optional data-safety check (creates and drops a scratch database):
+
+```powershell
+npm run verify:migration
+```
+
+### 5. Run the app
+
+```powershell
+npm run dev                    # client: http://localhost:5173
+npm --prefix server run dev    # API:    http://localhost:4000
+```
+
+### 6. Tests and builds
+
+```powershell
+npm test                       # frontend (15 tests)
+npm run test:server            # all server tests (139)
+npm --prefix server run test:unit          # 93 unit tests
+npm --prefix server run test:integration   # 46 integration tests (real DB)
+
+npm run build                  # client production build
+npm run build:server           # server TypeScript build
+```
+
+Coverage:
+
+```powershell
+npm run test:coverage         # server coverage report
+```
+
+Real results for this assignment are in `docs/test-results.md` and
+`docs/metrics/comparison.md`.
 ---
 
 ## 🌐 Live Demo

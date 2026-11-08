@@ -9,6 +9,8 @@ and this project adheres to Semantic Versioning.
 
 ## [Assignment 02 - Commit 1: Setup] - 2026-11-06
 
+**Commit hash:** `843db2e`
+
 ### Added
 - **Git Baseline & Branching**:
   - Tagged `assignment-01-baseline` at the final Assignment 01 commit (`ecb83cd`).
@@ -39,6 +41,7 @@ and this project adheres to Semantic Versioning.
 
 ## [Assignment 02 - Commit 2: Migration] - 2026-11-08
 
+**Commit hash:** `5e8312c`
 **Commit message:** `feat(migration): versioned DB migrations with data verification and centralised config`
 **Author:** Saad Naeem
 
@@ -70,6 +73,7 @@ and this project adheres to Semantic Versioning.
 
 ## [Assignment 02 - Commit 3: Transactions Refactoring] - 2026-11-08
 
+**Commit hash:** `705d244`
 **Commit message:** `refactor(transactions): controller-service-repository layering for transactions`
 
 ### Added
@@ -89,6 +93,7 @@ and this project adheres to Semantic Versioning.
 
 ## [Assignment 02 - Commit 4: Budgets and Analytics Refactoring] - 2026-11-08
 
+**Commit hash:** `832f49f`
 **Commit message:** `refactor(budgets): layered budgets and monthly summary with unit tests`
 
 ### Added
@@ -115,6 +120,7 @@ and this project adheres to Semantic Versioning.
 
 ## [Assignment 02 - Commit 5: Rewrite] - 2026-11-08
 
+**Commit hash:** `547fb72`
 **Commit message:** `refactor(rewrite): rewrite CsvParser/CsvFormatter and AuthService with tests and report`
 **Author:** Uzair
 
@@ -138,4 +144,47 @@ and this project adheres to Semantic Versioning.
 - ESLint (complexity 8) on the five rewritten files: 0 warnings, 0 errors; jscpd on the same files: 0 clones.
 - Full suites pass: backend unit 93/93, backend integration 46/46, frontend 15/15.
 
+## [Assignment 02 - Commit 6: Integration, Regression and Final Reports] - 2026-11-08
 
+**Commit hash:** assigned when this commit is created
+**Commit message:** `test(docs): integration and regression tests, metrics comparison, final reports`
+**Author:** Saad Naeem
+
+### Added
+- **Sequential test configuration** (`server/vitest.config.ts`): excludes
+  `dist/**` and runs integration files with `fileParallelism: false` /
+  `maxWorkers: 1` so the shared `expensemate_test` database cannot race.
+- **Coverage provider** (`@vitest/coverage-v8@5.0.1`, pinned) and
+  `test:coverage` scripts: coverage now runs and reports 75.18% statements /
+  78.68% branches / 83.44% functions / 75.37% lines (raw output in
+  `docs/metrics/after/coverage.txt`).
+- **Regression evidence**: `docs/regression-test-plan.md` maps every Assignment
+  01 feature to its automated test or manual step; `docs/test-results.md`
+  records the real build/test output (154/154 passing).
+- **Final reports**: `docs/final-report.md`, `docs/demo-checklist.md`,
+  `docs/defect-log.md`, `docs/team-contribution.md`,
+  `docs/metrics/comparison.md`.
+- **README run instructions**: database setup, migrations, backend/frontend
+  start and the full test commands for a clean clone.
+
+### Changed
+- `server/src/services/budgetsService.test.ts`: removed the unused
+  `ValidationError` import.
+- `src/components/ui/button.tsx`, `src/components/ui/navigation-menu.tsx`:
+  file-level `react-refresh/only-export-components` disable so the generated
+  shadcn files no longer fail `npm run lint`.
+- `docs/CHANGELOG.md`: commit hashes added to every Assignment 02 entry.
+- Root `package.json`: convenience scripts `install:server`, `migrate`,
+  `verify:migration`, `build:server`, `test:server`, `test:coverage`.
+
+### Verification
+- Client build PASS; server build PASS.
+- Frontend 15/15, server unit 93/93, server integration 46/46 — 154/154 total.
+- ESLint complexity: 0 errors, 4 warnings (down from 5).
+- Coverage command PASS with the percentages above.
+
+### Known limitations
+- `routes/backup.ts` and `routes/currencies.ts` still contain inline SQL.
+- Four complexity warnings remain in `budgetsService.ts` /
+  `transactionsService.ts`; covered by tests, left for a future refactor.
+- Browser E2E is manual; no E2E runner exists in the repo.

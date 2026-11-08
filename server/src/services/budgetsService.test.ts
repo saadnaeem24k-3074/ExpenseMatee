@@ -6,7 +6,7 @@ import type {
   BudgetWithSpendingRaw,
   UpsertBudgetData,
 } from "../types/budget.js";
-import { ValidationError, NotFoundError } from "../errors/appError.js";
+import { NotFoundError } from "../errors/appError.js";
 
 class FakeBudgetsRepository implements IBudgetsRepository {
   public budgets: (Budget & { userId: string })[] = [];
