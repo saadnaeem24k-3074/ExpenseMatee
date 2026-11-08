@@ -87,3 +87,30 @@ and this project adheres to Semantic Versioning.
 ### Changed
 - `server/src/routes/transactions.ts`: Streamlined to a thin router wiring routes to controller methods; removed all SQL and direct `pool` imports.
 
+## [Assignment 02 - Commit 4: Budgets and Analytics Refactoring] - 2026-11-08
+
+**Commit message:** `refactor(budgets): layered budgets and monthly summary with unit tests`
+
+### Added
+- **Layered Architecture for Budgets**:
+  - `server/src/types/budget.ts`: Strongly-typed interfaces (`Budget`, `BudgetWithSpendingRaw`, `BudgetWithSpending`, `UpsertBudgetInput`, `UpsertBudgetData`).
+  - `server/src/repositories/budgetsRepository.ts`: Encapsulates SQL for budget queries and upserts (`findByMonthAndYear`, `upsert`, `deleteById`, `findById`) behind `IBudgetsRepository`.
+  - `server/src/services/budgetsService.ts`: Pure domain logic computing budget status (`ok`, `warning`, `exceeded`) and percentage consumption, with parameter validation and currency defaults.
+  - `server/src/controllers/budgetsController.ts`: Presentation controller handling `GET /api/budgets`, `POST /api/budgets`, and `DELETE /api/budgets/:id`.
+  - `server/src/services/budgetsService.test.ts`: 13 in-memory unit tests using `FakeBudgetsRepository` verifying status thresholds, multi-category calculation, validations, and edge cases.
+- **Layered Architecture for Analytics**:
+  - `server/src/types/analytics.ts`: Data types (`CategoryBreakdownRow`, `MonthlyTrendRow`, `CategoryBreakdownResult`, `MonthlyTrendResult`).
+  - `server/src/repositories/analyticsRepository.ts`: Pure SQL queries for category breakdowns and multi-month historical trends behind `IAnalyticsRepository`.
+  - `server/src/services/analyticsService.ts`: Service managing date defaults, parameter clamping (1-24 months), and response assembly.
+  - `server/src/controllers/analyticsController.ts`: Presentation controller handling `GET /api/analytics/category-breakdown` and `GET /api/analytics/trend`.
+  - `server/src/services/analyticsService.test.ts`: 6 in-memory unit tests using `FakeAnalyticsRepository`.
+- **Documentation & Verification**:
+  - `docs/layer-checks.md`: Layer isolation report confirming zero `pool` imports and zero raw SQL statements in controllers and services, and zero business calculations in repositories.
+  - `docs/refactoring-budgets.md`: Verification report with test execution outputs and an end-to-end trace of "Monthly Budget Summary" through all four layers.
+  - `docs/architecture-after.md`: Updated comprehensive architecture document and Mermaid diagram covering Transactions, Budgets, and Analytics subsystems.
+
+### Changed
+- `server/src/routes/budgets.ts`: Reduced to a thin 17-line router without SQL or `pool` imports.
+- `server/src/routes/analytics.ts`: Reduced to a thin 15-line router without SQL or `pool` imports.
+
+
