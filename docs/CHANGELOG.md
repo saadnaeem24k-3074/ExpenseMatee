@@ -36,3 +36,34 @@ and this project adheres to Semantic Versioning.
   - Created `docs/metrics/METHOD.md` detailing the commands and reproduction steps for all metrics.
 - **Architecture Documentation**:
   - Created `docs/architecture-before.md` containing a Mermaid diagram illustrating the current two-tier monolithic architecture (Routes -> pool.query -> PostgreSQL).
+
+## [Assignment 02 - Commit 2: Migration] - 2026-11-08
+
+**Commit message:** `feat(migration): versioned DB migrations with data verification and centralised config`
+**Author:** Saad Naeem
+
+### Added
+- **Versioned migration system** (`server/src/db/migrations/`):
+  - `001_initial_schema.sql` — Assignment 01 schema reproduced verbatim with idempotent statements, safe to apply to an existing database.
+  - `002_transaction_integrity.sql` — `transactions_amount_positive` CHECK (`amount > 0`, `NOT VALID`) and `idx_transactions_user_type_date`.
+  - `schema_migrations` tracking table recording `id`, SHA-256 `checksum`, and `applied_at`.
+- **Data-safety verification** (`server/src/db/verifyMigration.ts`, `npm run verify:migration`):
+  - Creates a throwaway database, reproduces the pre-migration schema, seeds 2 users / 3 transactions / 2 budgets, snapshots counts + totals + checksums, runs the real migration runner, compares snapshots, and drops the scratch database.
+- **Centralised configuration** (`server/src/config.ts`):
+  - Validates `DATABASE_URL`, `SESSION_SECRET` (min 16 chars), `PORT`, `NODE_ENV`, `CLIENT_ORIGIN`; fails fast with actionable errors.
+  - Now the only module that reads `process.env`.
+- **Documentation** (`docs/migration-report.md`): before/target state, reason, steps, risks, rollback notes, and real migration/verification/test output.
+
+### Changed
+- `server/src/db/migrate.ts` rewritten: runs only pending migrations in filename order, one transaction per migration, checksum-drift detection, advisory lock, and explicit applied/skipped logging. `npm run migrate` still works.
+- `server/src/db/pool.ts`, `server/src/app.ts`, `server/src/index.ts` now consume `config` instead of reading `process.env` directly; removed the insecure `"dev-secret-change-me"` fallback.
+- `server/.env.example` completed with comments and the test-database note.
+- `server/package.json`: added `verify:migration`; `test:unit` now excludes `dist/**` so compiled tests cannot be executed accidentally.
+
+### Removed
+- `server/src/db/schema.sql` — superseded by `migrations/001_initial_schema.sql`.
+
+### Verification
+- `npm run migrate` applied 2 migrations on the first run and skipped both on the second (idempotent).
+- `npm run verify:migration` reported identical row counts, totals, and checksums before and after migration.
+- `npm run build` passed; all existing tests still pass: backend unit 27/27, backend integration 31/31, frontend 15/15 (73 total).

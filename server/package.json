@@ -8,10 +8,11 @@
     "build": "tsc -b",
     "start": "node dist/index.js",
     "migrate": "tsx src/db/migrate.ts",
+    "verify:migration": "tsx src/db/verifyMigration.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:integration": "vitest run src/integration --maxWorkers=1",
-    "test:unit": "vitest run --exclude src/integration/**"
+    "test:unit": "vitest run --exclude src/integration/** --exclude dist/**"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

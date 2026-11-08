@@ -1,9 +1,9 @@
-import "dotenv/config";
 import "express-async-errors";
 import express from "express";
 import cors from "cors";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
+import { config } from "./config.js";
 import { pool } from "./db/pool.js";
 import { authRouter } from "./routes/auth.js";
 import { transactionsRouter } from "./routes/transactions.js";
@@ -15,11 +15,11 @@ import { backupRouter } from "./routes/backup.js";
 const app = express();
 const PgSession = connectPgSimple(session);
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = config.isProduction;
 
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN ?? "http://localhost:5173",
+    origin: config.clientOrigin,
     credentials: true,
   })
 );
@@ -29,7 +29,7 @@ app.use(
   session({
     store: new PgSession({ pool, tableName: "session" }),
     name: "connect.sid",
-    secret: process.env.SESSION_SECRET ?? "dev-secret-change-me",
+    secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {

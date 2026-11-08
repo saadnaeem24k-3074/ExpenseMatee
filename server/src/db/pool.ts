@@ -1,10 +1,10 @@
 import pg from "pg";
-import "dotenv/config";
+import { config } from "../config.js";
 
 const { Pool } = pg;
 
 export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: config.databaseUrl,
 });
 
 pool.on("error", (err) => {

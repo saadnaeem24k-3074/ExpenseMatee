@@ -1,3 +1,7 @@
+-- 001_initial_schema.sql
+-- Baseline schema, identical to the Assignment 01 schema.sql.
+-- Every statement is idempotent so this migration can also be applied to an
+-- existing Assignment 01 database without losing data.
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 

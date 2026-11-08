@@ -36,8 +36,9 @@ cp .env.example .env
 # and SESSION_SECRET to a long random string
 
 npm install
-npm run migrate   # creates users, transactions, and session tables
-npm run dev       # starts the API on http://localhost:4000
+npm run migrate            # applies only pending versioned migrations (safe to re-run)
+npm run verify:migration   # optional: proves migrations preserve seeded data
+npm run dev                # starts the API on http://localhost:4000
 ```
 
 ## 3. Frontend setup
