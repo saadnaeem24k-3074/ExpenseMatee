@@ -21,10 +21,7 @@ import { ChevronLeft, ChevronRight, PiggyBank, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import { api, type Budget as BudgetRecord, type Currency } from "@/lib/api"
 import { ApiError, useAuth } from "@/lib/useAuth"
-
-// Same categories offered in AddTransaction.tsx, minus "salary" since
-// budgets only make sense for expense categories.
-const EXPENSE_CATEGORIES = ["shopping", "entertainment", "utilities", "others"]
+import { EXPENSE_CATEGORIES } from "@/lib/transactionCategories"
 
 const MONTH_NAMES = [
     "January", "February", "March", "April", "May", "June",
@@ -51,7 +48,7 @@ const Budget = () => {
     const [currencies, setCurrencies] = useState<Currency[]>([])
     const [loading, setLoading] = useState(true)
 
-    const [category, setCategory] = useState(EXPENSE_CATEGORIES[0])
+    const [category, setCategory] = useState<string>(EXPENSE_CATEGORIES[0])
     const [amount, setAmount] = useState(0)
     const [currency, setCurrency] = useState("PKR")
     const [saving, setSaving] = useState(false)

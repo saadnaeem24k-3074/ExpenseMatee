@@ -16,7 +16,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { format } from "date-fns"
+import { format, startOfToday } from "date-fns"
 import {
     Select,
     SelectContent,
@@ -34,7 +34,9 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { useTransactions, type transactionn } from "@/lib/useTransactions"
 import { ApiError, useAuth } from "@/lib/useAuth"
-import { api, type Currency } from "@/lib/api"
+import { useCurrencies } from "@/lib/useCurrencies"
+import { categoriesForType } from "@/lib/transactionCategories"
+import { isFutureDate } from "@/lib/transactionDate"
 
 const AddTransaction = () => {
 
@@ -52,18 +54,12 @@ const AddTransaction = () => {
     const [amount, setAmount] = useState(0);
     const [description, setDescription] = useState<string>('');
     const [category, setCategory] = useState<string>('');
-    const [type, setType] = useState<string>("Expense")
+    const [type, setType] = useState<"Expense" | "Income">("Expense")
     const [currency, setCurrency] = useState<string>(() => user?.base_currency ?? 'PKR')
-    const [currencies, setCurrencies] = useState<Currency[]>([])
+    const currencies = useCurrencies()
     const [editId, setEditId] = useState<string | null>(null)
     const [submitting, setSubmitting] = useState(false)
     const location = useLocation()
-
-    useEffect(() => {
-        api.currencies.list()
-            .then(({ currencies }) => setCurrencies(currencies))
-            .catch(() => setCurrencies([]))
-    }, [])
 
     useEffect(() => {
         const editTransaction: transactionn = location.state?.editTrans
@@ -74,14 +70,29 @@ const AddTransaction = () => {
                 setType(editTransaction.type)
                 setAmount(editTransaction.Amount)
                 setDescription(editTransaction.Description)
-                setCategory(editTransaction.Category)
+                setCategory(
+                    categoriesForType(editTransaction.type).includes(editTransaction.Category)
+                        ? editTransaction.Category
+                        : ""
+                )
                 setCurrency(editTransaction.Currency || 'PKR')
             })
         }
     }, [location.state])
 
+    function selectType(nextType: "Expense" | "Income") {
+        setType(nextType)
+        if (!categoriesForType(nextType).includes(category)) {
+            setCategory("")
+        }
+    }
+
     async function addTransaction(): Promise<string | null> {
 
+        if (date && isFutureDate(date)) {
+            toast.error("Transaction date cannot be in the future.")
+            return null
+        }
         if (!amount || !date || !category) {
             return null;
         }
@@ -145,7 +156,7 @@ const AddTransaction = () => {
                                 className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-md py-2 text-sm font-medium transition-colors ${type === 'Expense' ? 'bg-white text-ink shadow-sm' : 'text-ink/50'
                                     }`}
                             >
-                                <RadioGroupItem value="Expense" id="r1" checked={type === 'Expense'} onClick={() => setType("Expense")} className="sr-only" />
+                                <RadioGroupItem value="Expense" id="r1" checked={type === 'Expense'} onClick={() => selectType("Expense")} className="sr-only" />
                                 Expense
                             </label>
 
@@ -154,7 +165,7 @@ const AddTransaction = () => {
                                 className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-md py-2 text-sm font-medium transition-colors ${type === 'Income' ? 'bg-white text-ink shadow-sm' : 'text-ink/50'
                                     }`}
                             >
-                                <RadioGroupItem value="Income" id="r2" checked={type === 'Income'} onClick={() => setType("Income")} className="sr-only" />
+                                <RadioGroupItem value="Income" id="r2" checked={type === 'Income'} onClick={() => selectType("Income")} className="sr-only" />
                                 Income
                             </label>
                         </RadioGroup>
@@ -192,11 +203,9 @@ const AddTransaction = () => {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            <SelectItem value="salary">Salary</SelectItem>
-                                            <SelectItem value="shopping">Shopping</SelectItem>
-                                            <SelectItem value="entertainment">Entertainment</SelectItem>
-                                            <SelectItem value="utilities">Utilities</SelectItem>
-                                            <SelectItem value="others">Others</SelectItem>
+                                            {categoriesForType(type).map((option) => (
+                                                <SelectItem key={option} value={option} className="capitalize">{option}</SelectItem>
+                                            ))}
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
@@ -227,7 +236,14 @@ const AddTransaction = () => {
                                         <Calendar
                                             mode="single"
                                             selected={date}
-                                            onSelect={setDate}
+                                            disabled={{ after: startOfToday() }}
+                                            onSelect={(selectedDate) => {
+                                                if (selectedDate && isFutureDate(selectedDate)) {
+                                                    toast.error("Transaction date cannot be in the future.")
+                                                    return
+                                                }
+                                                setDate(selectedDate)
+                                            }}
                                             initialFocus
                                             required
                                         />

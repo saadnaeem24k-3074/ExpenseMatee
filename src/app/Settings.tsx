@@ -112,7 +112,7 @@ const Settings = () => {
                         <CardTitle>Base currency</CardTitle>
                         <CardDescription>
                             Dashboard totals, budgets, and reports are converted into this currency.
-                            Individual transactions keep whatever currency they were entered in.
+                            Transaction amounts are displayed in this currency; their original entry currency is preserved.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

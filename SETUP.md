@@ -38,7 +38,7 @@ cp .env.example .env
 npm install
 npm run migrate            # applies only pending versioned migrations (safe to re-run)
 npm run verify:migration   # optional: proves migrations preserve seeded data
-npm run dev                # starts the API on http://localhost:4000
+npm run dev                # starts the API on http://localhost:4001
 ```
 
 ## 3. Frontend setup
@@ -46,7 +46,7 @@ npm run dev                # starts the API on http://localhost:4000
 ```bash
 # from the project root
 cp .env.example .env
-# VITE_API_URL defaults to http://localhost:4000/api, adjust if needed
+# VITE_API_URL defaults to http://localhost:4001/api, adjust if needed
 
 npm install
 npm run dev        # starts the frontend on http://localhost:5173
@@ -60,7 +60,8 @@ Visit `http://localhost:5173/signup` to create an account, then you're in.
   `SESSION_SECRET`, `CLIENT_ORIGIN` (your deployed frontend URL), and
   `NODE_ENV=production` as env vars. In production the session cookie is set
   with `secure: true` and `sameSite: "none"`, so the backend **must** be served
-  over HTTPS for cookies to work cross-site.
+  over HTTPS for cookies to work cross-site. The server trusts one reverse
+  proxy hop in production so Express recognizes HTTPS after TLS termination.
 - **Frontend**: Vercel (as before). Set `VITE_API_URL` to your deployed backend's
   `/api` URL in the Vercel project's environment variables.
 - Run `npm run migrate` once against your production database before first use.

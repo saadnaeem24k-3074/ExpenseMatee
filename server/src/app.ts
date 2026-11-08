@@ -3,7 +3,9 @@ import express from "express";
 import cors from "cors";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
+import type { CorsOptions } from "cors";
 import { config } from "./config.js";
+import { isAllowedCorsOrigin } from "./corsOrigins.js";
 import { pool } from "./db/pool.js";
 import { authRouter } from "./routes/auth.js";
 import { transactionsRouter } from "./routes/transactions.js";
@@ -17,12 +19,24 @@ const PgSession = connectPgSimple(session);
 
 const isProd = config.isProduction;
 
-app.use(
-  cors({
-    origin: config.clientOrigin,
-    credentials: true,
-  })
-);
+if (isProd) {
+  app.set("trust proxy", 1);
+}
+
+// Echoes the browser's Origin when it is allowed (configured list, or any
+// loop-back origin while running outside production, e.g. Vite dev (:5173)
+// and preview (:4173) builds). Otherwise no ACA header is emitted and the
+// browser rejects the response.
+const corsOptions: CorsOptions = {
+  origin: (origin, callback) =>
+    callback(
+      null,
+      isAllowedCorsOrigin(origin, config.clientOrigins, !isProd)
+    ),
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "5mb" })); // CSV import + backup restore payloads can exceed the 100kb default
 
 app.use(

@@ -10,6 +10,8 @@ import gsap from 'gsap'
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { api, ApiError } from "@/lib/api"
+import { useAuth } from "@/lib/useAuth"
+import { useCurrencies } from "@/lib/useCurrencies"
 
 const Transactions = () => {
 
@@ -22,6 +24,8 @@ const Transactions = () => {
   })
 
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const currencies = useCurrencies()
   const { transactions: transaction, removeTransaction, refresh } = useTransactions()
   const [importing, setImporting] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -122,6 +126,8 @@ const Transactions = () => {
         <div className="myTable">
           <TransactionTable
             transactions={transaction}
+            baseCurrency={user?.base_currency ?? "PKR"}
+            currencies={currencies}
             onEdit={handelEdit}
             onDelete={deleteTransaction}
           />

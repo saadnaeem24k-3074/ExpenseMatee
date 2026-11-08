@@ -25,7 +25,13 @@ const chartConfig = {
 
 const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-export function TrendChart() {
+export function TrendChart({
+  baseCurrency,
+  currencySymbol,
+}: {
+  baseCurrency: string
+  currencySymbol: string
+}) {
   const [data, setData] = useState<{ month: string; income: number; expense: number }[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -38,7 +44,7 @@ export function TrendChart() {
         }))
       })
       .finally(() => setLoading(false))
-  }, [])
+  }, [baseCurrency])
 
   return (
     <Card className="my-poppins rounded-xl border border-ink/10 bg-white shadow-none">
@@ -66,7 +72,17 @@ export function TrendChart() {
                 tick={{ fill: "#101826", fontWeight: 500 }}
               />
               <YAxis hide />
-              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    formatter={(value) => (
+                      <span className="font-mono font-medium tabular-nums">
+                        {currencySymbol}{Number(value).toLocaleString()}
+                      </span>
+                    )}
+                  />
+                }
+              />
               <ChartLegend content={<ChartLegendContent />} />
               <Bar dataKey="income" fill="var(--color-income)" radius={4} />
               <Bar dataKey="expense" fill="var(--color-expense)" radius={4} />

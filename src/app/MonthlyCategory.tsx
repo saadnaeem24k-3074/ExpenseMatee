@@ -21,9 +21,10 @@ interface CategorySlice {
 interface MonthlyCategoryProps {
   chartConfig: ChartConfig
   chartData: CategorySlice[]
+  currencySymbol?: string
 }
 
-const MonthlyCategory = ({ chartConfig, chartData }: MonthlyCategoryProps) => {
+const MonthlyCategory = ({ chartConfig, chartData, currencySymbol = "" }: MonthlyCategoryProps) => {
 
   const total = chartData.reduce((acc, curr) => acc + curr.visitors, 0)
 
@@ -53,7 +54,16 @@ const MonthlyCategory = ({ chartConfig, chartData }: MonthlyCategoryProps) => {
           <PieChart>
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={
+                <ChartTooltipContent
+                  hideLabel
+                  formatter={(value) => (
+                    <span className="font-mono font-medium tabular-nums">
+                      {currencySymbol}{Number(value).toLocaleString()}
+                    </span>
+                  )}
+                />
+              }
             />
             <Pie
               data={chartData}

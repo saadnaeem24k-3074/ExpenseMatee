@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { parseClientOrigins } from "./corsOrigins.js";
 
 const SUPPORTED_ENVIRONMENTS = ["development", "test", "production"] as const;
 type NodeEnvironment = (typeof SUPPORTED_ENVIRONMENTS)[number];
@@ -64,8 +65,10 @@ export const config = Object.freeze({
   nodeEnv,
   isProduction: nodeEnv === "production",
   isTest: nodeEnv === "test",
-  port: readPort("PORT", "4000"),
+  port: readPort("PORT", "4001"),
   databaseUrl: readDatabaseUrl(),
   sessionSecret: readSessionSecret(),
-  clientOrigin: readOptional("CLIENT_ORIGIN", "http://localhost:5173"),
+  clientOrigins: Object.freeze(
+    parseClientOrigins(readOptional("CLIENT_ORIGIN", "http://localhost:5173"))
+  ),
 });

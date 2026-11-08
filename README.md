@@ -161,7 +161,7 @@ Edit both files:
 
 - `DATABASE_URL` — `postgres://USER:PASSWORD@localhost:5432/expensemate`
 - `SESSION_SECRET` — 16+ random characters (`openssl rand -hex 32`)
-- `NODE_ENV`, `PORT` (default `4000`), `CLIENT_ORIGIN` (default `http://localhost:5173`)
+- `NODE_ENV`, `PORT` (default `4001`), `CLIENT_ORIGIN` (default `http://localhost:5173`)
 - `.env.test` must point at `expensemate_test`
 
 ### 4. Create the databases and migrate
@@ -183,7 +183,7 @@ npm run verify:migration
 
 ```powershell
 npm run dev                    # client: http://localhost:5173
-npm --prefix server run dev    # API:    http://localhost:4000
+npm --prefix server run dev    # API:    http://localhost:4001
 ```
 
 ### 6. Tests and builds

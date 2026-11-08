@@ -118,6 +118,11 @@ const Report = () => {
   // 5 categories reduced on the client — works for any category the
   // user has used, not just the 5 originally hardcoded ones.
   const loadBreakdown = useCallback(async () => {
+    if (!user) {
+      setBreakdown([])
+      setLoadingBreakdown(false)
+      return
+    }
     const [year, month] = date ? date.split("-").map(Number) : [new Date().getFullYear(), new Date().getMonth() + 1]
     setLoadingBreakdown(true)
     try {
@@ -128,7 +133,7 @@ const Report = () => {
     } finally {
       setLoadingBreakdown(false)
     }
-  }, [date])
+  }, [date, user])
 
   useEffect(() => {
     loadBreakdown()
@@ -162,10 +167,6 @@ const Report = () => {
   )
   const topCategoriesTotal = topCategories.reduce((acc, c) => acc + c.total, 0)
 
-  function updateDate(e: React.ChangeEvent<HTMLInputElement>) {
-    setDate(e.target.value)
-  }
-
   return (
     <>
       <Navbar />
@@ -178,15 +179,16 @@ const Report = () => {
             <h1 className="my-display text-2xl font-semibold text-ink sm:text-3xl">Monthly report</h1>
           </div>
 
-          <div className="date-picker flex items-center gap-2 rounded-lg border border-ink/10 bg-white px-4 py-2.5">
+          <label className="date-picker flex cursor-pointer items-center gap-2 rounded-lg border border-ink/10 bg-white px-4 py-2.5">
             <Calendar className="h-4 w-4 text-ink/50" />
             <input
               type="month"
+              aria-label="Select report month"
               value={date}
-              className="bg-transparent text-sm font-medium text-ink outline-none"
-              onChange={updateDate}
+              className="cursor-pointer bg-transparent text-sm font-medium text-ink outline-none"
+              onChange={(event) => setDate(event.target.value)}
             />
-          </div>
+          </label>
         </div>
 
         {/* Income & Expense Cards */}
@@ -219,7 +221,7 @@ const Report = () => {
             {loadingBreakdown ? (
               <p className="py-10 text-center text-sm text-ink/50">Loading...</p>
             ) : (
-              <MonthlyCategory chartData={chartData} chartConfig={chartConfig} />
+              <MonthlyCategory chartData={chartData} chartConfig={chartConfig} currencySymbol={symbol} />
             )}
           </div>
 
@@ -228,14 +230,14 @@ const Report = () => {
               <BarChart3 className="h-5 w-5 text-ink" />
               <h2 className="my-display text-lg font-semibold text-ink">Monthly trends</h2>
             </div>
-            <MonthlyTrack income={income} expense={expense} />
+            <MonthlyTrack income={income} expense={expense} currencySymbol={symbol} />
           </div>
         </div>
 
         {/* 6-month trend + top categories */}
         <div className="mt-6 flex flex-col gap-4 lg:flex-row">
           <div className="w-full lg:w-1/2">
-            <TrendChart />
+            <TrendChart baseCurrency={baseCurrency} currencySymbol={symbol} />
           </div>
 
           <div className="w-full lg:w-1/2">

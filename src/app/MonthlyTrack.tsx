@@ -17,7 +17,15 @@ import {
 } from "@/components/ui/chart"
 import { useMemo } from "react"
 
-export function MonthlyTrack({ expense, income }: { expense: number, income: number }) {
+export function MonthlyTrack({
+  expense,
+  income,
+  currencySymbol,
+}: {
+  expense: number
+  income: number
+  currencySymbol: string
+}) {
 
   const chartData = useMemo(() => [
     { month: "Expense", amount: Number(expense), color: "#A23E3E" },
@@ -64,7 +72,7 @@ export function MonthlyTrack({ expense, income }: { expense: number, income: num
                   return (
                     <div className="rounded-lg bg-ink px-4 py-2 shadow-lg">
                       <p className="text-sm font-medium text-white tabular-nums">
-                        {payload[0].payload.month}: ${payload[0].value?.toLocaleString()}
+                        {payload[0].payload.month}: {currencySymbol}{payload[0].value?.toLocaleString()}
                       </p>
                     </div>
                   )

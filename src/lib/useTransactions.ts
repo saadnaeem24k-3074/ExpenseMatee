@@ -9,7 +9,7 @@ export interface transactionn {
     Description: string
     Category: string
     Date: Date
-    type: string
+    type: "Income" | "Expense"
     Currency: string
 }
 
@@ -39,7 +39,7 @@ export function toPayload(t: Omit<transactionn, "id">) {
         description: t.Description,
         category: t.Category,
         date: toDateString(t.Date),
-        type: t.type as "Income" | "Expense",
+        type: t.type,
         currency: t.Currency,
     }
 }

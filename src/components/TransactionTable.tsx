@@ -10,15 +10,26 @@ import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { ArrowDownLeft, ArrowUpRight, Receipt } from "lucide-react"
 import type { transactionn } from "@/lib/useTransactions"
+import type { Currency } from "@/lib/api"
+import { convertAmount, currencySymbol } from "@/lib/currency"
 
 interface TransactionTableProps {
   transactions: transactionn[]
+  baseCurrency?: string
+  currencies?: Currency[]
   onEdit?: (trans: transactionn) => void
   onDelete?: (id: string) => void
   emptyHint?: string
 }
 
-export function TransactionTable({ transactions, onEdit, onDelete, emptyHint }: TransactionTableProps) {
+export function TransactionTable({
+  transactions,
+  baseCurrency = "PKR",
+  currencies = [],
+  onEdit,
+  onDelete,
+  emptyHint,
+}: TransactionTableProps) {
   if (transactions.length === 0) {
     return (
       <div className="flex flex-col items-center rounded-xl border border-ink/10 bg-white px-10 py-14 text-center">
@@ -52,6 +63,14 @@ export function TransactionTable({ transactions, onEdit, onDelete, emptyHint }: 
         <TableBody>
           {transactions.map((trans) => {
             const isIncome = trans.type === "Income"
+            const canConvert =
+              trans.Currency === baseCurrency ||
+              (currencies.some((currency) => currency.code === trans.Currency) &&
+                currencies.some((currency) => currency.code === baseCurrency))
+            const displayCurrency = canConvert ? baseCurrency : trans.Currency
+            const displayAmount = canConvert
+              ? convertAmount(trans.Amount, trans.Currency, baseCurrency, currencies)
+              : trans.Amount
             return (
               <TableRow key={trans.id} className="border-b border-ink/5 last:border-0 hover:bg-canvas/60">
                 <TableCell className="py-3.5">
@@ -74,7 +93,10 @@ export function TransactionTable({ transactions, onEdit, onDelete, emptyHint }: 
                     isIncome ? "text-sage" : "text-clay"
                   }`}
                 >
-                  {isIncome ? "+" : "−"}${trans.Amount.toLocaleString()}
+                  {isIncome ? "+" : "−"}{currencySymbol(displayCurrency, currencies)}
+                  {displayAmount.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  })}
                 </TableCell>
                 {showActions && (
                   <TableCell className="py-3.5">

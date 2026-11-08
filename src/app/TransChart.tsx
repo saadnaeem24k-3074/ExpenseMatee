@@ -12,9 +12,11 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart"
 import { useTransactions } from "@/lib/useTransactions"
+import { useAuth } from "@/lib/useAuth"
+import { useCurrencies } from "@/lib/useCurrencies"
+import { convertAmount, currencySymbol } from "@/lib/currency"
 
 const CATEGORY_COLORS: Record<string, string> = {
-  salary: "#2F6F52",
   shopping: "#B8862F",
   entertainment: "#6C5CE7",
   utilities: "#3B7EA8",
@@ -24,20 +26,23 @@ const CATEGORY_COLORS: Record<string, string> = {
 export function TransChart() {
 
   const { transactions: transaction } = useTransactions()
+  const { user } = useAuth()
+  const currencies = useCurrencies()
+  const baseCurrency = user?.base_currency ?? "PKR"
+  const symbol = currencySymbol(baseCurrency, currencies)
 
-  const categories = ["salary", "shopping", "entertainment", "utilities", "others"] as const
+  const categories = ["shopping", "entertainment", "utilities", "others"] as const
 
   const chartData = categories.map((cat) => ({
     browser: cat,
     visitors: transaction
-      .filter((trans) => trans.Category === cat)
-      .reduce((acc, curr) => acc + Number(curr.Amount), 0),
+      .filter((trans) => trans.type === "Expense" && trans.Category === cat)
+      .reduce((acc, curr) => acc + convertAmount(curr.Amount, curr.Currency, baseCurrency, currencies), 0),
     fill: CATEGORY_COLORS[cat],
   }))
 
   const chartConfig = {
     visitors: { label: "Amount" },
-    salary: { label: "Salary", color: CATEGORY_COLORS.salary },
     shopping: { label: "Shopping", color: CATEGORY_COLORS.shopping },
     entertainment: { label: "Entertainment", color: CATEGORY_COLORS.entertainment },
     utilities: { label: "Utilities", color: CATEGORY_COLORS.utilities },
@@ -82,7 +87,7 @@ export function TransChart() {
                   return (
                     <div className="rounded-lg bg-ink px-3 py-2 shadow-lg">
                       <p className="text-sm font-medium text-white tabular-nums">
-                        {chartConfig[payload[0].payload.browser as keyof typeof chartConfig]?.label}: ${Number(payload[0].value).toLocaleString()}
+                        {chartConfig[payload[0].payload.browser as keyof typeof chartConfig]?.label}: {symbol}{Number(payload[0].value).toLocaleString()}
                       </p>
                     </div>
                   )
